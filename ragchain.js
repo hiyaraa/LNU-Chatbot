@@ -5,22 +5,24 @@ import { vectorStore } from "./embeddings.js";
 import { ollamaLlm } from "./llms.js";
 
 const prompt = PromptTemplate.fromTemplate(
-  "You are an AI assistant of a school. Your task is to answer and explain in detail all user questions regarding the website given.: {context}"
+  "Based on the following context, answer the question: {question}\nContext: {context}\nAnswer:"
 );
-
 const chain = await createStuffDocumentsChain({
   llm: ollamaLlm,
   outputParser: new StringOutputParser(),
   prompt,
 });
 
-const question = "Who is the president?";
+export const question = "Tell me about LNU... and the officials.";
+
 const docs = await vectorStore.similaritySearch(question);
 const answer = await chain.invoke({
+  question : question,
   context: docs,
 });
 
 console.log(
-    "Question:", question,"\n",
-    "Answer:", answer
+  "Question:", question,
+  "Answer:", answer
 );
+
