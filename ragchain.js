@@ -5,7 +5,7 @@ import { vectorStore } from "./embeddings.js";
 import { ollamaLlm } from "./llms.js";
 
 const prompt = PromptTemplate.fromTemplate(
-  "Based on the following context, answer the question: {question}\nContext: {context}\nAnswer:"
+  "You are an AI assistant who is knowledgeable about the Student Handbook. Answer the questions in detail.: {question}\nContext: {context}\nAnswer:"
 );
 const chain = await createStuffDocumentsChain({
   llm: ollamaLlm,
@@ -13,7 +13,7 @@ const chain = await createStuffDocumentsChain({
   prompt,
 });
 
-export const question = "Tell me about LNU... and the officials.";
+export const question = "Tell me a brief history";
 
 const docs = await vectorStore.similaritySearch(question);
 const answer = await chain.invoke({
@@ -22,7 +22,7 @@ const answer = await chain.invoke({
 });
 
 console.log(
-  "Question:", question,
-  "Answer:", answer
+  " Question:", question, "\n",
+  "Answer:", answer,
 );
 
